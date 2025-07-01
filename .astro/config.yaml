@@ -1,0 +1,6 @@
+project:
+  name: kafka-airflow
+
+mount:
+  - source: ./data
+    target: /usr/local/airflow/data
