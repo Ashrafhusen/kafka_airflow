@@ -29,12 +29,12 @@ with DAG(
         msg = consumer.poll(timeout=10.0)
         data = None
         if msg is None:
-            print("❌ No message received.")
+            print("No message received.")
         elif msg.error():
-            print("❌ Consumer error:", msg.error())
+            print("Consumer error:", msg.error())
         else:
             data = json.loads(msg.value().decode('utf-8'))
-            print("✅ Extracted:", data)
+            print("Extracted:", data)
 
         consumer.close()
         return data
@@ -45,13 +45,13 @@ with DAG(
             return None
         data['bitcoin'] = round(data['bitcoin'], 2)
         data['ethereum'] = round(data['ethereum'], 2)
-        print("🔁 Transformed:", data)
+        print("Transformed:", data)
         return data
 
     @task()
     def load(data: dict):
         if not data:
-            print("⚠️ No data to load.")
+            print("No data to load.")
             return
 
         os.makedirs('/usr/local/airflow/data', exist_ok=True)
@@ -61,7 +61,7 @@ with DAG(
             if os.stat(file_path).st_size == 0:
                 writer.writeheader()
             writer.writerow(data)
-        print("✅ Loaded to CSV:", data)
+        print("Loaded to CSV:", data)
 
     # Define DAG execution flow
     load(transform(extract()))
